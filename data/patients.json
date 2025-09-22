@@ -1,0 +1,264 @@
+{
+  "patients": [
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c101",
+      "firstName": "Emma",
+      "lastName": "Johnson",
+      "email": "emma.johnson@email.com",
+      "phone": "+351912345678",
+      "dateOfBirth": "1988-03-15",
+      "gender": "Female",
+      "address": {
+        "street": "Rua das Flores 123",
+        "city": "Lisbon",
+        "state": "Lisbon",
+        "zipCode": "1000-001"
+      },
+      "emergencyContact": {
+        "name": "Daniel Johnson",
+        "phone": "+351912345679",
+        "relationship": "Husband"
+      },
+      "insuranceInfo": {
+        "provider": "Allianz Saúde",
+        "policyNumber": "ALZ123456"
+      },
+      "createdAt": "2024-01-15T10:30:00Z",
+      "updatedAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c102",
+      "firstName": "Miguel",
+      "lastName": "Santos",
+      "email": "miguel.santos@email.com",
+      "phone": "+351923456789",
+      "dateOfBirth": "1992-07-22",
+      "gender": "Male",
+      "address": {
+        "street": "Avenida da Liberdade 45",
+        "city": "Porto",
+        "state": "Porto",
+        "zipCode": "4000-001"
+      },
+      "emergencyContact": {
+        "name": "Sofia Santos",
+        "phone": "+351923456780",
+        "relationship": "Sister"
+      },
+      "insuranceInfo": {
+        "provider": "Medis",
+        "policyNumber": "MED789012"
+      },
+      "createdAt": "2024-01-16T14:20:00Z",
+      "updatedAt": "2024-01-16T14:20:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c103",
+      "firstName": "Sophia",
+      "lastName": "Rodrigues",
+      "email": "sophia.rodrigues@email.com",
+      "phone": "+351934567890",
+      "dateOfBirth": "1985-11-30",
+      "gender": "Female",
+      "address": {
+        "street": "Travessa do Carmo 67",
+        "city": "Coimbra",
+        "state": "Coimbra",
+        "zipCode": "3000-001"
+      },
+      "emergencyContact": {
+        "name": "Carlos Rodrigues",
+        "phone": "+351934567891",
+        "relationship": "Father"
+      },
+      "insuranceInfo": {
+        "provider": "Multicare",
+        "policyNumber": "MUL456789"
+      },
+      "createdAt": "2024-01-17T09:15:00Z",
+      "updatedAt": "2024-01-17T09:15:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c104",
+      "firstName": "Tiago",
+      "lastName": "Ferreira",
+      "email": "tiago.ferreira@email.com",
+      "phone": "+351945678901",
+      "dateOfBirth": "1995-02-14",
+      "gender": "Male",
+      "address": {
+        "street": "Praça do Comércio 89",
+        "city": "Faro",
+        "state": "Faro",
+        "zipCode": "8000-001"
+      },
+      "emergencyContact": {
+        "name": "Ana Ferreira",
+        "phone": "+351945678902",
+        "relationship": "Mother"
+      },
+      "insuranceInfo": {
+        "provider": "AdvanceCare",
+        "policyNumber": "ADV234567"
+      },
+      "createdAt": "2024-01-18T16:45:00Z",
+      "updatedAt": "2024-01-18T16:45:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c105",
+      "firstName": "Inês",
+      "lastName": "Costa",
+      "email": "ines.costa@email.com",
+      "phone": "+351956789012",
+      "dateOfBirth": "1990-09-08",
+      "gender": "Female",
+      "address": {
+        "street": "Rua Augusta 112",
+        "city": "Braga",
+        "state": "Braga",
+        "zipCode": "4700-001"
+      },
+      "emergencyContact": {
+        "name": "João Costa",
+        "phone": "+351956789013",
+        "relationship": "Brother"
+      },
+      "insuranceInfo": {
+        "provider": "Allianz Saúde",
+        "policyNumber": "ALZ789012"
+      },
+      "createdAt": "2024-01-19T11:30:00Z",
+      "updatedAt": "2024-01-19T11:30:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c106",
+      "firstName": "Ricardo",
+      "lastName": "Oliveira",
+      "email": "ricardo.oliveira@email.com",
+      "phone": "+351967890123",
+      "dateOfBirth": "1987-12-03",
+      "gender": "Male",
+      "address": {
+        "street": "Avenida dos Aliados 234",
+        "city": "Aveiro",
+        "state": "Aveiro",
+        "zipCode": "3800-001"
+      },
+      "emergencyContact": {
+        "name": "Marta Oliveira",
+        "phone": "+351967890124",
+        "relationship": "Wife"
+      },
+      "insuranceInfo": {
+        "provider": "Medis",
+        "policyNumber": "MED345678"
+      },
+      "createdAt": "2024-01-20T13:20:00Z",
+      "updatedAt": "2024-01-20T13:20:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c107",
+      "firstName": "Carolina",
+      "lastName": "Martins",
+      "email": "carolina.martins@email.com",
+      "phone": "+351978901234",
+      "dateOfBirth": "1993-06-18",
+      "gender": "Female",
+      "address": {
+        "street": "Rua do Ouro 56",
+        "city": "Viseu",
+        "state": "Viseu",
+        "zipCode": "3500-001"
+      },
+      "emergencyContact": {
+        "name": "Pedro Martins",
+        "phone": "+351978901235",
+        "relationship": "Husband"
+      },
+      "insuranceInfo": {
+        "provider": "Multicare",
+        "policyNumber": "MUL567890"
+      },
+      "createdAt": "2024-01-21T15:10:00Z",
+      "updatedAt": "2024-01-21T15:10:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c108",
+      "firstName": "André",
+      "lastName": "Pereira",
+      "email": "andre.pereira@email.com",
+      "phone": "+351989012345",
+      "dateOfBirth": "1989-04-25",
+      "gender": "Male",
+      "address": {
+        "street": "Largo do Chiado 78",
+        "city": "Guimarães",
+        "state": "Braga",
+        "zipCode": "4800-001"
+      },
+      "emergencyContact": {
+        "name": "Catarina Pereira",
+        "phone": "+351989012346",
+        "relationship": "Sister"
+      },
+      "insuranceInfo": {
+        "provider": "AdvanceCare",
+        "policyNumber": "ADV456789"
+      },
+      "createdAt": "2024-01-22T10:05:00Z",
+      "updatedAt": "2024-01-22T10:05:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c109",
+      "firstName": "Beatriz",
+      "lastName": "Gomes",
+      "email": "beatriz.gomes@email.com",
+      "phone": "+351990123456",
+      "dateOfBirth": "1991-08-12",
+      "gender": "Female",
+      "address": {
+        "street": "Rua de Santa Catarina 90",
+        "city": "Leiria",
+        "state": "Leiria",
+        "zipCode": "2400-001"
+      },
+      "emergencyContact": {
+        "name": "Luís Gomes",
+        "phone": "+351990123457",
+        "relationship": "Father"
+      },
+      "insuranceInfo": {
+        "provider": "Allianz Saúde",
+        "policyNumber": "ALZ901234"
+      },
+      "createdAt": "2024-01-23T14:35:00Z",
+      "updatedAt": "2024-01-23T14:35:00Z"
+    },
+    {
+      "_id": "64f8a1b2c9d8e7f6a5b4c110",
+      "firstName": "Daniel",
+      "lastName": "Lopes",
+      "email": "daniel.lopes@email.com",
+      "phone": "+351901234567",
+      "dateOfBirth": "1986-01-07",
+      "gender": "Male",
+      "address": {
+        "street": "Avenida da República 123",
+        "city": "Setúbal",
+        "state": "Setúbal",
+        "zipCode": "2900-001"
+      },
+      "emergencyContact": {
+        "name": "Sara Lopes",
+        "phone": "+351901234568",
+        "relationship": "Wife"
+      },
+      "insuranceInfo": {
+        "provider": "Medis",
+        "policyNumber": "MED678901"
+      },
+      "createdAt": "2024-01-24T16:50:00Z",
+      "updatedAt": "2024-01-24T16:50:00Z"
+    }
+  ]
+}

@@ -1,0 +1,184 @@
+{
+  "appointments": [
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c201",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c101",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c001",
+      "appointmentDate": "2024-02-01T10:00:00Z",
+      "duration": 60,
+      "appointmentType": "Initial Consultation",
+      "status": "Completed",
+      "notes": "Patient presented with mild anxiety symptoms. Agreed on weekly sessions.",
+      "symptoms": ["Anxiety", "Sleep difficulties"],
+      "treatmentPlan": {
+        "diagnosis": "Generalized Anxiety Disorder",
+        "goals": ["Reduce anxiety symptoms", "Improve sleep quality"],
+        "nextSteps": "Cognitive Behavioral Therapy sessions weekly"
+      },
+      "createdAt": "2024-01-25T09:00:00Z",
+      "updatedAt": "2024-02-01T11:00:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c202",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c102",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c002",
+      "appointmentDate": "2024-02-02T14:30:00Z",
+      "duration": 45,
+      "appointmentType": "Therapy Session",
+      "status": "Scheduled",
+      "notes": "Follow-up session for stress management techniques.",
+      "symptoms": ["Stress", "Work pressure"],
+      "treatmentPlan": {
+        "diagnosis": "Adjustment Disorder with Anxiety",
+        "goals": ["Develop coping strategies", "Reduce stress levels"],
+        "nextSteps": "Practice mindfulness exercises daily"
+      },
+      "createdAt": "2024-01-26T10:30:00Z",
+      "updatedAt": "2024-01-26T10:30:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c203",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c103",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c003",
+      "appointmentDate": "2024-02-03T11:15:00Z",
+      "duration": 60,
+      "appointmentType": "Follow-up",
+      "status": "Scheduled",
+      "notes": "Discussing progress with social anxiety exposure therapy.",
+      "symptoms": ["Social anxiety", "Avoidance behavior"],
+      "treatmentPlan": {
+        "diagnosis": "Social Anxiety Disorder",
+        "goals": ["Increase social engagement", "Reduce avoidance"],
+        "nextSteps": "Continue exposure therapy exercises"
+      },
+      "createdAt": "2024-01-27T14:15:00Z",
+      "updatedAt": "2024-01-27T14:15:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c204",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c104",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c004",
+      "appointmentDate": "2024-02-04T16:00:00Z",
+      "duration": 90,
+      "appointmentType": "Initial Consultation",
+      "status": "Completed",
+      "notes": "Patient reports relationship difficulties and mood swings.",
+      "symptoms": ["Mood swings", "Relationship issues", "Irritability"],
+      "treatmentPlan": {
+        "diagnosis": "Unspecified Mood Disorder",
+        "goals": ["Stabilize mood", "Improve communication skills"],
+        "nextSteps": "Keep mood journal and schedule next session"
+      },
+      "createdAt": "2024-01-28T11:45:00Z",
+      "updatedAt": "2024-02-04T17:30:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c205",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c105",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c005",
+      "appointmentDate": "2024-02-05T09:30:00Z",
+      "duration": 60,
+      "appointmentType": "Therapy Session",
+      "status": "Cancelled",
+      "notes": "Patient cancelled due to illness. Rescheduled for next week.",
+      "symptoms": ["Depression", "Low energy"],
+      "treatmentPlan": {
+        "diagnosis": "Major Depressive Disorder",
+        "goals": ["Increase activity level", "Improve mood"],
+        "nextSteps": "Reschedule appointment"
+      },
+      "createdAt": "2024-01-29T13:20:00Z",
+      "updatedAt": "2024-02-04T18:00:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c206",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c106",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c001",
+      "appointmentDate": "2024-02-06T15:45:00Z",
+      "duration": 45,
+      "appointmentType": "Follow-up",
+      "status": "Scheduled",
+      "notes": "Reviewing progress on anger management techniques.",
+      "symptoms": ["Anger issues", "Impulsivity"],
+      "treatmentPlan": {
+        "diagnosis": "Intermittent Explosive Disorder",
+        "goals": ["Improve anger control", "Develop coping strategies"],
+        "nextSteps": "Practice relaxation techniques daily"
+      },
+      "createdAt": "2024-01-30T10:10:00Z",
+      "updatedAt": "2024-01-30T10:10:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c207",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c107",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c002",
+      "appointmentDate": "2024-02-07T13:00:00Z",
+      "duration": 60,
+      "appointmentType": "Crisis Intervention",
+      "status": "Completed",
+      "notes": "Emergency session for acute anxiety attack. Patient stabilized.",
+      "symptoms": ["Panic attack", "Acute anxiety", "Hyperventilation"],
+      "treatmentPlan": {
+        "diagnosis": "Panic Disorder",
+        "goals": ["Prevent future attacks", "Develop emergency coping plan"],
+        "nextSteps": "Schedule regular therapy sessions"
+      },
+      "createdAt": "2024-01-31T16:30:00Z",
+      "updatedAt": "2024-02-07T14:00:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c208",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c108",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c003",
+      "appointmentDate": "2024-02-08T11:30:00Z",
+      "duration": 90,
+      "appointmentType": "Initial Consultation",
+      "status": "Completed",
+      "notes": "Patient seeking help for OCD symptoms affecting daily life.",
+      "symptoms": ["Obsessive thoughts", "Compulsive behaviors", "Anxiety"],
+      "treatmentPlan": {
+        "diagnosis": "Obsessive-Compulsive Disorder",
+        "goals": ["Reduce compulsive behaviors", "Manage obsessive thoughts"],
+        "nextSteps": "Begin Exposure and Response Prevention therapy"
+      },
+      "createdAt": "2024-02-01T09:45:00Z",
+      "updatedAt": "2024-02-08T13:00:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c209",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c109",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c004",
+      "appointmentDate": "2024-02-09T10:15:00Z",
+      "duration": 60,
+      "appointmentType": "Therapy Session",
+      "status": "Scheduled",
+      "notes": "Continuing work on self-esteem and body image issues.",
+      "symptoms": ["Low self-esteem", "Body dysmorphia", "Social withdrawal"],
+      "treatmentPlan": {
+        "diagnosis": "Body Dysmorphic Disorder",
+        "goals": ["Improve self-image", "Increase social engagement"],
+        "nextSteps": "Cognitive restructuring exercises"
+      },
+      "createdAt": "2024-02-02T14:20:00Z",
+      "updatedAt": "2024-02-02T14:20:00Z"
+    },
+    {
+      "_id": "64f8b2c3d9e8f7g6a5b4c210",
+      "patientId": "64f8a1b2c9d8e7f6a5b4c110",
+      "psychologistId": "64f8a1b2c9d8e7f6a5b4c005",
+      "appointmentDate": "2024-02-10T14:00:00Z",
+      "duration": 45,
+      "appointmentType": "Follow-up",
+      "status": "Scheduled",
+      "notes": "Reviewing progress on work-related stress management.",
+      "symptoms": ["Work stress", "Burnout symptoms", "Sleep problems"],
+      "treatmentPlan": {
+        "diagnosis": "Occupational Burnout",
+        "goals": ["Establish work-life balance", "Improve sleep hygiene"],
+        "nextSteps": "Implement time management strategies"
+      },
+      "createdAt": "2024-02-03T11:30:00Z",
+      "updatedAt": "2024-02-03T11:30:00Z"
+    }
+  ]
+}
