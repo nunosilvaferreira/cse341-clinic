@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const patientController = require('../controllers/patients');
 const validation = require('../middleware/validation');
+const { isAuthenticated } = require('../middleware/auth'); // Add this
+
+// Apply authentication to all patient routes
+router.use(isAuthenticated);
 
 // GET all patients
 router.get('/', patientController.getAllPatients);

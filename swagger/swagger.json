@@ -3,7 +3,11 @@
   "info": {
     "title": "Psychology Clinic Appointment System API",
     "description": "API for managing psychology clinic appointments and patient records",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "support@clinic.com"
+    }
   },
   "servers": [
     {
@@ -23,6 +27,10 @@
     {
       "name": "Appointments",
       "description": "Appointment management endpoints"
+    },
+    {
+      "name": "Health",
+      "description": "API health check endpoints"
     }
   ],
   "paths": {
@@ -30,28 +38,74 @@
       "get": {
         "tags": ["Patients"],
         "summary": "Get all patients",
+        "description": "Retrieve a list of all patients in the system",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Patient"
+                  "type": "object",
+                  "properties": {
+                    "patients": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Patient"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "tags": ["Patients"],
         "summary": "Create a new patient",
+        "description": "Add a new patient to the system",
         "requestBody": {
           "required": true,
           "content": {
@@ -74,10 +128,34 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Patient with email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -86,13 +164,16 @@
       "get": {
         "tags": ["Patients"],
         "summary": "Get patient by ID",
+        "description": "Retrieve a specific patient by their ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Patient ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
@@ -107,27 +188,51 @@
               }
             }
           },
-          "404": {
-            "description": "Patient not found"
-          },
           "400": {
-            "description": "Invalid ID format"
+            "description": "Invalid ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "put": {
         "tags": ["Patients"],
         "summary": "Update patient",
+        "description": "Update an existing patient's information",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Patient ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
@@ -153,41 +258,99 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Patient not found"
+            "description": "Patient not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
         "tags": ["Patients"],
         "summary": "Delete patient",
+        "description": "Delete a patient from the system",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Patient ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Patient deleted successfully"
-          },
-          "404": {
-            "description": "Patient not found"
+            "description": "Patient deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Patient deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid ID format"
+            "description": "Invalid ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -196,28 +359,101 @@
       "get": {
         "tags": ["Appointments"],
         "summary": "Get all appointments",
+        "description": "Retrieve a list of all appointments with optional filtering",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of items per page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by appointment status",
+            "schema": {
+              "type": "string",
+              "enum": ["Scheduled", "Completed", "Cancelled", "No-show"]
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Filter appointments from this date (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "Filter appointments to this date (YYYY-MM-DD)",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Appointment"
+                  "type": "object",
+                  "properties": {
+                    "appointments": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Appointment"
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "pages": {
+                      "type": "integer"
+                    }
                   }
                 }
               }
             }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "post": {
         "tags": ["Appointments"],
         "summary": "Create a new appointment",
+        "description": "Schedule a new appointment for a patient",
         "requestBody": {
           "required": true,
           "content": {
@@ -240,16 +476,44 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Patient not found"
+            "description": "Patient not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "409": {
-            "description": "Time slot already booked"
+            "description": "Time slot already booked or conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -258,13 +522,16 @@
       "get": {
         "tags": ["Appointments"],
         "summary": "Get appointment by ID",
+        "description": "Retrieve a specific appointment by its ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Appointment ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
@@ -279,27 +546,51 @@
               }
             }
           },
-          "404": {
-            "description": "Appointment not found"
-          },
           "400": {
-            "description": "Invalid ID format"
+            "description": "Invalid ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Appointment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "put": {
         "tags": ["Appointments"],
         "summary": "Update appointment",
+        "description": "Update an existing appointment",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Appointment ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
@@ -325,41 +616,109 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Appointment not found"
+            "description": "Appointment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Time slot conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
         "tags": ["Appointments"],
         "summary": "Delete appointment",
+        "description": "Cancel and delete an appointment",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "description": "Appointment ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Appointment deleted successfully"
-          },
-          "404": {
-            "description": "Appointment not found"
+            "description": "Appointment deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Appointment deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid ID format"
+            "description": "Invalid ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Appointment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           }
         }
       }
@@ -368,13 +727,25 @@
       "get": {
         "tags": ["Appointments"],
         "summary": "Get appointments by patient ID",
+        "description": "Retrieve all appointments for a specific patient",
         "parameters": [
           {
             "name": "patientId",
             "in": "path",
             "required": true,
+            "description": "Patient ID",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "^[a-f\\d]{24}$"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by appointment status",
+            "schema": {
+              "type": "string",
+              "enum": ["Scheduled", "Completed", "Cancelled", "No-show"]
             }
           }
         ],
@@ -393,10 +764,66 @@
             }
           },
           "400": {
-            "description": "Invalid ID format"
+            "description": "Invalid ID format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Patient not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal server error"
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["Health"],
+        "summary": "Health check",
+        "description": "Check if the API is running properly",
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "uptime": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -408,84 +835,9 @@
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "dateOfBirth": {
             "type": "string",
-            "format": "date"
+            "example": "64f7a1b2c9d8e7f6a5b4c3d2"
           },
-          "gender": {
-            "type": "string",
-            "enum": ["Male", "Female", "Other"]
-          },
-          "address": {
-            "type": "object",
-            "properties": {
-              "street": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
-              },
-              "state": {
-                "type": "string"
-              },
-              "zipCode": {
-                "type": "string"
-              }
-            }
-          },
-          "emergencyContact": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
-              "phone": {
-                "type": "string"
-              },
-              "relationship": {
-                "type": "string"
-              }
-            }
-          },
-          "insuranceInfo": {
-            "type": "object",
-            "properties": {
-              "provider": {
-                "type": "string"
-              },
-              "policyNumber": {
-                "type": "string"
-              }
-            }
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "PatientInput": {
-        "type": "object",
-        "required": ["firstName", "lastName", "email", "phone", "dateOfBirth", "gender"],
-        "properties": {
           "firstName": {
             "type": "string",
             "example": "John"
@@ -510,7 +862,7 @@
           },
           "gender": {
             "type": "string",
-            "enum": ["Male", "Female", "Other"],
+            "enum": ["Male", "Female", "Other", "Prefer not to say"],
             "example": "Male"
           },
           "address": {
@@ -531,6 +883,10 @@
               "zipCode": {
                 "type": "string",
                 "example": "10001"
+              },
+              "country": {
+                "type": "string",
+                "example": "USA"
               }
             }
           },
@@ -561,8 +917,145 @@
               "policyNumber": {
                 "type": "string",
                 "example": "POL123456"
+              },
+              "groupNumber": {
+                "type": "string",
+                "example": "GRP789"
               }
             }
+          },
+          "medicalHistory": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Anxiety disorder", "Depression"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-09-01T10:00:00Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-09-01T10:00:00Z"
+          }
+        }
+      },
+      "PatientInput": {
+        "type": "object",
+        "required": ["firstName", "lastName", "email", "phone", "dateOfBirth", "gender"],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "John"
+          },
+          "lastName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 100,
+            "example": "john.doe@example.com"
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+?[\\d\\s-()]+$",
+            "example": "+1234567890"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1990-01-01"
+          },
+          "gender": {
+            "type": "string",
+            "enum": ["Male", "Female", "Other", "Prefer not to say"],
+            "example": "Male"
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "street": {
+                "type": "string",
+                "maxLength": 100,
+                "example": "123 Main St"
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "New York"
+              },
+              "state": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "NY"
+              },
+              "zipCode": {
+                "type": "string",
+                "maxLength": 20,
+                "example": "10001"
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "USA"
+              }
+            }
+          },
+          "emergencyContact": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 100,
+                "example": "Jane Doe"
+              },
+              "phone": {
+                "type": "string",
+                "pattern": "^\\+?[\\d\\s-()]+$",
+                "example": "+1987654321"
+              },
+              "relationship": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "Spouse"
+              }
+            }
+          },
+          "insuranceInfo": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "maxLength": 100,
+                "example": "ABC Insurance"
+              },
+              "policyNumber": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "POL123456"
+              },
+              "groupNumber": {
+                "type": "string",
+                "maxLength": 50,
+                "example": "GRP789"
+              }
+            }
+          },
+          "medicalHistory": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Anxiety disorder", "Depression"]
           }
         }
       },
@@ -570,62 +1063,89 @@
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string"
+            "type": "string",
+            "example": "64f7a1b2c9d8e7f6a5b4c3d4"
           },
           "patientId": {
             "$ref": "#/components/schemas/Patient"
           },
           "psychologistId": {
-            "type": "string"
+            "type": "string",
+            "example": "64f7a1b2c9d8e7f6a5b4c3d3"
+          },
+          "psychologistName": {
+            "type": "string",
+            "example": "Dr. Sarah Smith"
           },
           "appointmentDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-09-15T10:00:00Z"
           },
           "duration": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 30,
+            "maximum": 120,
+            "example": 60
           },
           "appointmentType": {
             "type": "string",
-            "enum": ["Initial Consultation", "Therapy Session", "Follow-up", "Crisis Intervention"]
+            "enum": ["Initial Consultation", "Therapy Session", "Follow-up", "Crisis Intervention", "Assessment"],
+            "example": "Therapy Session"
           },
           "status": {
             "type": "string",
-            "enum": ["Scheduled", "Completed", "Cancelled", "No-show"]
+            "enum": ["Scheduled", "Completed", "Cancelled", "No-show", "Rescheduled"],
+            "example": "Scheduled"
           },
           "notes": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 1000,
+            "example": "Patient shows signs of improvement in managing anxiety symptoms."
           },
           "symptoms": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "example": ["Anxiety", "Insomnia", "Stress"]
           },
           "treatmentPlan": {
             "type": "object",
             "properties": {
               "diagnosis": {
-                "type": "string"
+                "type": "string",
+                "example": "Generalized Anxiety Disorder"
               },
               "goals": {
                 "type": "array",
                 "items": {
                   "type": "string"
-                }
+                },
+                "example": ["Reduce anxiety symptoms", "Improve sleep quality", "Develop coping strategies"]
               },
               "nextSteps": {
-                "type": "string"
+                "type": "string",
+                "example": "Continue CBT sessions weekly for the next 4 weeks"
+              },
+              "medications": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": ["Sertraline 50mg daily"]
               }
             }
           },
           "createdAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-09-01T10:00:00Z"
           },
           "updatedAt": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-09-01T10:00:00Z"
           }
         }
       },
@@ -635,10 +1155,12 @@
         "properties": {
           "patientId": {
             "type": "string",
+            "pattern": "^[a-f\\d]{24}$",
             "example": "64f7a1b2c9d8e7f6a5b4c3d2"
           },
           "psychologistId": {
             "type": "string",
+            "pattern": "^[a-f\\d]{24}$",
             "example": "64f7a1b2c9d8e7f6a5b4c3d3"
           },
           "appointmentDate": {
@@ -654,16 +1176,18 @@
           },
           "appointmentType": {
             "type": "string",
-            "enum": ["Initial Consultation", "Therapy Session", "Follow-up", "Crisis Intervention"],
+            "enum": ["Initial Consultation", "Therapy Session", "Follow-up", "Crisis Intervention", "Assessment"],
             "example": "Therapy Session"
           },
           "status": {
             "type": "string",
-            "enum": ["Scheduled", "Completed", "Cancelled", "No-show"],
+            "enum": ["Scheduled", "Completed", "Cancelled", "No-show", "Rescheduled"],
+            "default": "Scheduled",
             "example": "Scheduled"
           },
           "notes": {
             "type": "string",
+            "maxLength": 1000,
             "example": "Patient shows signs of improvement"
           },
           "symptoms": {
@@ -690,7 +1214,93 @@
               "nextSteps": {
                 "type": "string",
                 "example": "Continue CBT sessions weekly"
+              },
+              "medications": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": ["Sertraline 50mg daily"]
               }
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Error description"
+          },
+          "message": {
+            "type": "string",
+            "example": "Detailed error message"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 400
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "path": {
+            "type": "string",
+            "example": "/api/patients"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "PatientId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Patient ID",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f\\d]{24}$"
+        }
+      },
+      "AppointmentId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "Appointment ID",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-f\\d]{24}$"
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
             }
           }
         }
