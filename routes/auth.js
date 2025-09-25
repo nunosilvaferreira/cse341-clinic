@@ -1,82 +1,165 @@
 const express = require('express');
-const passport = require('../config/passport');
-const { isAuthenticated } = require('../middleware/auth');
+const passport = require('passport');
 const router = express.Router();
 
-// GitHub OAuth routes
+/**
+ * @swagger
+ * /auth/github:
+ *   get:
+ *     summary: Initiate GitHub OAuth authentication
+ *     description: Redirects to GitHub for OAuth authentication
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirect to GitHub OAuth
+ */
 router.get('/github',
   passport.authenticate('github', { scope: ['user:email'] })
 );
 
+/**
+ * @swagger
+ * /auth/github/callback:
+ *   get:
+ *     summary: GitHub OAuth callback
+ *     description: Handles the callback from GitHub OAuth
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirect to dashboard on success, login on failure
+ *       500:
+ *         description: Internal server error
+ */
 router.get('/github/callback',
-  passport.authenticate('github', { 
-    failureRedirect: '/login-failure',
-    successRedirect: '/login-success'
-  })
+  passport.authenticate('github', {
+    failureRedirect: '/auth/failure',
+    failureMessage: true
+  }),
+  (req, res) => {
+    // Successful authentication
+    console.log(`✅ User ${req.user.email} logged in successfully`);
+    
+    // Redirect based on context
+    const redirectUrl = req.session.returnTo || '/dashboard';
+    delete req.session.returnTo;
+    
+    res.redirect(redirectUrl);
+  }
 );
 
-// Login success route
-router.get('/login-success', (req, res) => {
+/**
+ * @swagger
+ * /auth/status:
+ *   get:
+ *     summary: Check authentication status
+ *     description: Returns the current authentication status and user info
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Authentication status
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 isAuthenticated:
+ *                   type: boolean
+ *                 user:
+ *                   type: object
+ *                   nullable: true
+ */
+router.get('/status', (req, res) => {
   res.json({
-    message: 'Login successful!',
-    user: {
-      id: req.user.id,
-      username: req.user.username,
-      displayName: req.user.displayName,
-      role: req.user.role
-    },
-    endpoints: {
-      profile: '/auth/profile',
-      logout: '/auth/logout'
-    }
+    isAuthenticated: req.isAuthenticated(),
+    user: req.isAuthenticated() ? req.user.getPublicProfile() : null,
+    timestamp: new Date().toISOString()
   });
 });
 
-// Login failure route
-router.get('/login-failure', (req, res) => {
-  res.status(401).json({
-    message: 'GitHub authentication failed'
-  });
-});
-
-// Get current user profile
-router.get('/profile', isAuthenticated, (req, res) => {
-  res.json({
-    user: {
-      id: req.user.id,
-      username: req.user.username,
-      displayName: req.user.displayName,
-      email: req.user.email,
-      role: req.user.role,
-      avatarUrl: req.user.avatarUrl,
-      profileUrl: req.user.profileUrl,
-      createdAt: req.user.createdAt
-    }
-  });
-});
-
-// Logout route
-router.get('/logout', (req, res) => {
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Log out user
+ *     description: Ends the user session and logs them out
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Successfully logged out
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
-      return res.status(500).json({ message: 'Logout failed' });
+      console.error('Logout error:', err);
+      return res.status(500).json({
+        error: 'Logout failed',
+        message: 'An error occurred during logout'
+      });
     }
-    req.session.destroy(() => {
-      res.json({ message: 'Logout successful' });
+    
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Session destruction error:', err);
+      }
+      
+      res.json({
+        message: 'Successfully logged out',
+        timestamp: new Date().toISOString()
+      });
     });
   });
 });
 
-// Check authentication status
-router.get('/status', (req, res) => {
+/**
+ * @swagger
+ * /auth/failure:
+ *   get:
+ *     summary: Authentication failure
+ *     description: Endpoint for handling authentication failures
+ *     tags: [Authentication]
+ *     responses:
+ *       401:
+ *         description: Authentication failed
+ */
+router.get('/failure', (req, res) => {
+  const message = req.session.messages ? req.session.messages[0] : 'Authentication failed';
+  
+  res.status(401).json({
+    error: 'Authentication failed',
+    message: message,
+    retryUrl: '/auth/github'
+  });
+});
+
+/**
+ * @swagger
+ * /auth/protected:
+ *   get:
+ *     summary: Protected route example
+ *     description: Example of a protected route that requires authentication
+ *     tags: [Authentication]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully accessed protected route
+ *       401:
+ *         description: Not authenticated
+ */
+router.get('/protected', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({
+      error: 'Not authenticated',
+      message: 'This route requires authentication'
+    });
+  }
+  
   res.json({
-    isAuthenticated: req.isAuthenticated(),
-    user: req.isAuthenticated() ? {
-      id: req.user.id,
-      username: req.user.username,
-      displayName: req.user.displayName,
-      role: req.user.role
-    } : null
+    message: 'Welcome to protected route!',
+    user: req.user.getPublicProfile(),
+    timestamp: new Date().toISOString()
   });
 });
 
