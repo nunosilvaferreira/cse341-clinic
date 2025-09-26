@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const patientController = require('../controllers/patients');
 const validation = require('../middleware/validation');
-const { isAuthenticated, isOwnerOrAdmin, sanitizeInputs } = require('../middleware/auth');
+const { isAuthenticated, isOwnerOrAdmin, sanitizeInputs, requireRole } = require('../middleware/auth');
 
 /**
  * Patient Routes
