@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const appointmentController = require('../controllers/appointments');
-const validation = require('../middleware/validation');
-const { isAuthenticated, optionalAuth, sanitizeInputs } = require('../middleware/auth');
+const { validateAppointment } = require('../middleware/validation');
+const { isAuthenticated, optionalAuth } = require('../middleware/auth');
+const { sanitizeInputs } = require('../middleware/validation');
 
 /**
  * Appointment Routes
@@ -56,21 +57,6 @@ router.use(sanitizeInputs);
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 appointments:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Appointment'
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *                 pages:
- *                   type: integer
  *       500:
  *         description: Internal server error
  */
@@ -89,15 +75,11 @@ router.get('/', optionalAuth, appointmentController.getAllAppointments);
  *         required: true
  *         schema:
  *           type: string
- *           pattern: '^[a-f\d]{24}$'
+ *           pattern: '^[a-f\\d]{24}$'
  *         description: Appointment ID
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'
  *       400:
  *         description: Invalid ID format
  *       404:
@@ -122,23 +104,11 @@ router.get('/:id', optionalAuth, appointmentController.getAppointmentById);
  *         required: true
  *         schema:
  *           type: string
- *           pattern: '^[a-f\d]{24}$'
+ *           pattern: '^[a-f\\d]{24}$'
  *         description: Patient ID
- *       - in: query
- *         name: status
- *         schema:
- *           type: string
- *           enum: [Scheduled, Completed, Cancelled, No-show, Rescheduled]
- *         description: Filter by appointment status
  *     responses:
  *       200:
  *         description: Successful operation
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Appointment'
  *       400:
  *         description: Invalid ID format
  *       401:
@@ -168,10 +138,6 @@ router.get('/patient/:patientId', isAuthenticated, appointmentController.getAppo
  *     responses:
  *       201:
  *         description: Appointment created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'
  *       400:
  *         description: Validation error
  *       401:
@@ -183,7 +149,7 @@ router.get('/patient/:patientId', isAuthenticated, appointmentController.getAppo
  *       500:
  *         description: Internal server error
  */
-router.post('/', isAuthenticated, validation.validateAppointment, appointmentController.createAppointment);
+router.post('/', isAuthenticated, validateAppointment, appointmentController.createAppointment);
 
 /**
  * @swagger
@@ -200,7 +166,7 @@ router.post('/', isAuthenticated, validation.validateAppointment, appointmentCon
  *         required: true
  *         schema:
  *           type: string
- *           pattern: '^[a-f\d]{24}$'
+ *           pattern: '^[a-f\\d]{24}$'
  *         description: Appointment ID
  *     requestBody:
  *       required: true
@@ -211,10 +177,6 @@ router.post('/', isAuthenticated, validation.validateAppointment, appointmentCon
  *     responses:
  *       200:
  *         description: Appointment updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'
  *       400:
  *         description: Validation error
  *       401:
@@ -226,7 +188,7 @@ router.post('/', isAuthenticated, validation.validateAppointment, appointmentCon
  *       500:
  *         description: Internal server error
  */
-router.put('/:id', isAuthenticated, validation.validateAppointment, appointmentController.updateAppointment);
+router.put('/:id', isAuthenticated, validateAppointment, appointmentController.updateAppointment);
 
 /**
  * @swagger
@@ -243,7 +205,7 @@ router.put('/:id', isAuthenticated, validation.validateAppointment, appointmentC
  *         required: true
  *         schema:
  *           type: string
- *           pattern: '^[a-f\d]{24}$'
+ *           pattern: '^[a-f\\d]{24}$'
  *         description: Appointment ID
  *     responses:
  *       200:
