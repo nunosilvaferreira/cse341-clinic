@@ -29,16 +29,154 @@
       "description": "Appointment management endpoints"
     },
     {
+      "name": "Authentication",
+      "description": "Authentication and authorization endpoints"
+    },
+    {
       "name": "Health",
       "description": "API health check endpoints"
     }
   ],
   "paths": {
+    "/auth/github": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Initiate GitHub OAuth authentication",
+        "description": "Redirects to GitHub for OAuth authentication",
+        "responses": {
+          "302": {
+            "description": "Redirect to GitHub OAuth"
+          }
+        }
+      }
+    },
+    "/auth/github/callback": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "GitHub OAuth callback",
+        "description": "Handles the callback from GitHub OAuth",
+        "responses": {
+          "302": {
+            "description": "Redirect to API docs on success, login on failure"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/status": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Check authentication status",
+        "description": "Returns the current authentication status and user info",
+        "responses": {
+          "200": {
+            "description": "Authentication status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isAuthenticated": {
+                      "type": "boolean"
+                    },
+                    "user": {
+                      "type": "object",
+                      "nullable": true
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Log out user",
+        "description": "Ends the user session and logs them out",
+        "responses": {
+          "200": {
+            "description": "Successfully logged out",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/protected": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Protected route example",
+        "description": "Example of a protected route that requires authentication",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully accessed protected route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        }
+      }
+    },
     "/patients": {
       "get": {
         "tags": ["Patients"],
         "summary": "Get all patients",
         "description": "Retrieve a list of all patients in the system",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "page",
@@ -90,6 +228,12 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Insufficient permissions"
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -106,6 +250,11 @@
         "tags": ["Patients"],
         "summary": "Create a new patient",
         "description": "Add a new patient to the system",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -137,6 +286,9 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
           "409": {
             "description": "Patient with email already exists",
             "content": {
@@ -165,6 +317,11 @@
         "tags": ["Patients"],
         "summary": "Get patient by ID",
         "description": "Retrieve a specific patient by their ID",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -198,6 +355,9 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
           "404": {
             "description": "Patient not found",
             "content": {
@@ -224,6 +384,11 @@
         "tags": ["Patients"],
         "summary": "Update patient",
         "description": "Update an existing patient's information",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -267,6 +432,9 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
           "404": {
             "description": "Patient not found",
             "content": {
@@ -293,6 +461,11 @@
         "tags": ["Patients"],
         "summary": "Delete patient",
         "description": "Delete a patient from the system",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -331,6 +504,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Admin access required"
           },
           "404": {
             "description": "Patient not found",
@@ -388,7 +567,7 @@
             "description": "Filter by appointment status",
             "schema": {
               "type": "string",
-              "enum": ["Scheduled", "Completed", "Cancelled", "No-show"]
+              "enum": ["Scheduled", "Completed", "Cancelled", "No-show", "Rescheduled"]
             }
           },
           {
@@ -454,6 +633,11 @@
         "tags": ["Appointments"],
         "summary": "Create a new appointment",
         "description": "Schedule a new appointment for a patient",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -484,6 +668,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required"
           },
           "404": {
             "description": "Patient not found",
@@ -582,6 +769,11 @@
         "tags": ["Appointments"],
         "summary": "Update appointment",
         "description": "Update an existing appointment",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -625,6 +817,9 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
           "404": {
             "description": "Appointment not found",
             "content": {
@@ -661,6 +856,11 @@
         "tags": ["Appointments"],
         "summary": "Delete appointment",
         "description": "Cancel and delete an appointment",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -700,6 +900,9 @@
               }
             }
           },
+          "401": {
+            "description": "Authentication required"
+          },
           "404": {
             "description": "Appointment not found",
             "content": {
@@ -728,6 +931,11 @@
         "tags": ["Appointments"],
         "summary": "Get appointments by patient ID",
         "description": "Retrieve all appointments for a specific patient",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "patientId",
@@ -745,7 +953,7 @@
             "description": "Filter by appointment status",
             "schema": {
               "type": "string",
-              "enum": ["Scheduled", "Completed", "Cancelled", "No-show"]
+              "enum": ["Scheduled", "Completed", "Cancelled", "No-show", "Rescheduled"]
             }
           }
         ],
@@ -772,6 +980,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Authentication required"
           },
           "404": {
             "description": "Patient not found",
@@ -830,6 +1041,14 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid",
+        "description": "Session cookie for authentication"
+      }
+    },
     "schemas": {
       "Patient": {
         "type": "object",
@@ -1209,11 +1428,11 @@
                 "items": {
                   "type": "string"
                 },
-                "example": ["Reduce anxiety symptoms", "Improve sleep quality"]
+                "example": ["Reduce anxiety symptoms"]
               },
               "nextSteps": {
                 "type": "string",
-                "example": "Continue CBT sessions weekly"
+                "example": "Continue CBT sessions"
               },
               "medications": {
                 "type": "array",
@@ -1231,77 +1450,20 @@
         "properties": {
           "error": {
             "type": "string",
-            "example": "Error description"
+            "example": "Error message description"
           },
-          "message": {
+          "details": {
             "type": "string",
-            "example": "Detailed error message"
-          },
-          "statusCode": {
-            "type": "integer",
-            "example": 400
+            "example": "Additional error details"
           },
           "timestamp": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-09-01T10:00:00Z"
           },
           "path": {
             "type": "string",
             "example": "/api/patients"
-          }
-        }
-      }
-    },
-    "parameters": {
-      "PatientId": {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "description": "Patient ID",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f\\d]{24}$"
-        }
-      },
-      "AppointmentId": {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "description": "Appointment ID",
-        "schema": {
-          "type": "string",
-          "pattern": "^[a-f\\d]{24}$"
-        }
-      }
-    },
-    "responses": {
-      "NotFound": {
-        "description": "Resource not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
-      "ValidationError": {
-        "description": "Validation error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
-      "ServerError": {
-        "description": "Internal server error",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
           }
         }
       }
