@@ -26,7 +26,7 @@ router.get('/github',
  *     tags: [Authentication]
  *     responses:
  *       302:
- *         description: Redirect to dashboard on success, login on failure
+ *         description: Redirect to API docs on success, login on failure
  *       500:
  *         description: Internal server error
  */
@@ -39,8 +39,8 @@ router.get('/github/callback',
     // Successful authentication
     console.log(`✅ User ${req.user.email} logged in successfully`);
     
-    // Redirect based on context
-    const redirectUrl = req.session.returnTo || '/dashboard';
+    // Redirect based on context, fallback to Swagger docs
+    const redirectUrl = req.session.returnTo || '/api-docs';
     delete req.session.returnTo;
     
     res.redirect(redirectUrl);
