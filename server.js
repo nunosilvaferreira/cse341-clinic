@@ -13,6 +13,11 @@ const { attachUser } = require('./middleware/auth');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy is required for secure cookies on Render/Heroku
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Environment verification
 console.log('🚀 Starting Psychology Clinic API Server...');
 console.log('=== Environment Configuration ===');
@@ -42,7 +47,7 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   },
-  // In production, consider using MongoDB store or Redis
+  // In production, consider using a persistent store like MongoDB or Redis
   // store: new MongoStore({ mongooseConnection: mongoose.connection })
 }));
 
@@ -53,15 +58,13 @@ app.use(passport.session());
 // CORS configuration
 app.use(cors({
   origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
+    if (!origin) return callback(null, true); // allow requests with no origin
     const allowedOrigins = [
       'http://localhost:3000',
       'https://cse341-clinic.onrender.com',
       process.env.FRONTEND_URL
     ].filter(Boolean);
-    
+
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
@@ -89,18 +92,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// API Routes
+// API Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'Psychology Clinic API Documentation'
 }));
 
+// Routes
 app.use('/auth', require('./routes/auth'));
 app.use('/patients', require('./routes/patients'));
 app.use('/appointments', require('./routes/appointments'));
 
-// Health check endpoint with detailed information
+// Health check endpoint
 app.get('/health', (req, res) => {
   const healthCheck = {
     status: 'OK',
@@ -117,7 +121,6 @@ app.get('/health', (req, res) => {
       appointments: '/appointments'
     }
   };
-  
   res.status(200).json(healthCheck);
 });
 
