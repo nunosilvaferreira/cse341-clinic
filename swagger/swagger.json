@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Psychology Clinic Appointment System API",
-    "description": "API for managing psychology clinic appointments and patient records",
+    "description": "API for managing psychology clinic appointments and patient records with GitHub OAuth authentication",
     "version": "1.0.0",
     "contact": {
       "name": "API Support",
@@ -10,6 +10,10 @@
     }
   },
   "servers": [
+    {
+      "url": "/",
+      "description": "Current server"
+    },
     {
       "url": "http://localhost:3000",
       "description": "Development server"
@@ -21,16 +25,16 @@
   ],
   "tags": [
     {
+      "name": "Authentication",
+      "description": "GitHub OAuth authentication endpoints"
+    },
+    {
       "name": "Patients",
       "description": "Patient management endpoints"
     },
     {
       "name": "Appointments",
       "description": "Appointment management endpoints"
-    },
-    {
-      "name": "Authentication",
-      "description": "Authentication and authorization endpoints"
     },
     {
       "name": "Health",
@@ -42,7 +46,7 @@
       "get": {
         "tags": ["Authentication"],
         "summary": "Initiate GitHub OAuth authentication",
-        "description": "Redirects to GitHub for OAuth authentication",
+        "description": "Redirects to GitHub for OAuth authentication. This starts the login process.",
         "responses": {
           "302": {
             "description": "Redirect to GitHub OAuth"
@@ -54,7 +58,7 @@
       "get": {
         "tags": ["Authentication"],
         "summary": "GitHub OAuth callback",
-        "description": "Handles the callback from GitHub OAuth",
+        "description": "Handles the callback from GitHub OAuth. This is where GitHub redirects after authentication.",
         "responses": {
           "302": {
             "description": "Redirect to API docs on success, login on failure"
@@ -133,11 +137,6 @@
         "tags": ["Authentication"],
         "summary": "Protected route example",
         "description": "Example of a protected route that requires authentication",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successfully accessed protected route",
@@ -171,12 +170,7 @@
       "get": {
         "tags": ["Patients"],
         "summary": "Get all patients",
-        "description": "Retrieve a list of all patients in the system",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Retrieve a list of all patients in the system (requires authentication)",
         "parameters": [
           {
             "name": "page",
@@ -231,30 +225,15 @@
           "401": {
             "description": "Authentication required"
           },
-          "403": {
-            "description": "Insufficient permissions"
-          },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "post": {
         "tags": ["Patients"],
         "summary": "Create a new patient",
-        "description": "Add a new patient to the system",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Add a new patient to the system (requires authentication)",
         "requestBody": {
           "required": true,
           "content": {
@@ -277,37 +256,16 @@
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           },
           "401": {
             "description": "Authentication required"
           },
           "409": {
-            "description": "Patient with email already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient with email already exists"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       }
@@ -316,12 +274,7 @@
       "get": {
         "tags": ["Patients"],
         "summary": "Get patient by ID",
-        "description": "Retrieve a specific patient by their ID",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Retrieve a specific patient by their ID (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -346,49 +299,23 @@
             }
           },
           "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid ID format"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Patient not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "put": {
         "tags": ["Patients"],
         "summary": "Update patient",
-        "description": "Update an existing patient's information",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Update an existing patient's information (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -423,49 +350,23 @@
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Patient not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "delete": {
         "tags": ["Patients"],
         "summary": "Delete patient",
-        "description": "Delete a patient from the system",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Delete a patient from the system (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -496,40 +397,16 @@
             }
           },
           "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid ID format"
           },
           "401": {
             "description": "Authentication required"
           },
-          "403": {
-            "description": "Admin access required"
-          },
           "404": {
-            "description": "Patient not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       }
@@ -618,26 +495,14 @@
             }
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "post": {
         "tags": ["Appointments"],
         "summary": "Create a new appointment",
-        "description": "Schedule a new appointment for a patient",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Schedule a new appointment for a patient (requires authentication)",
         "requestBody": {
           "required": true,
           "content": {
@@ -660,47 +525,19 @@
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Patient not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient not found"
           },
           "409": {
-            "description": "Time slot already booked or conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Time slot already booked or conflict"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       }
@@ -734,46 +571,20 @@
             }
           },
           "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid ID format"
           },
           "404": {
-            "description": "Appointment not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Appointment not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "put": {
         "tags": ["Appointments"],
         "summary": "Update appointment",
-        "description": "Update an existing appointment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Update an existing appointment (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -808,59 +619,26 @@
             }
           },
           "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid input"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Appointment not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Appointment not found"
           },
           "409": {
-            "description": "Time slot conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Time slot conflict"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       },
       "delete": {
         "tags": ["Appointments"],
         "summary": "Delete appointment",
-        "description": "Cancel and delete an appointment",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Cancel and delete an appointment (requires authentication)",
         "parameters": [
           {
             "name": "id",
@@ -891,37 +669,16 @@
             }
           },
           "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid ID format"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Appointment not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Appointment not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       }
@@ -930,12 +687,7 @@
       "get": {
         "tags": ["Appointments"],
         "summary": "Get appointments by patient ID",
-        "description": "Retrieve all appointments for a specific patient",
-        "security": [
-          {
-            "cookieAuth": []
-          }
-        ],
+        "description": "Retrieve all appointments for a specific patient (requires authentication)",
         "parameters": [
           {
             "name": "patientId",
@@ -972,37 +724,16 @@
             }
           },
           "400": {
-            "description": "Invalid ID format",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Invalid ID format"
           },
           "401": {
             "description": "Authentication required"
           },
           "404": {
-            "description": "Patient not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Patient not found"
           },
           "500": {
-            "description": "Internal server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
+            "description": "Internal server error"
           }
         }
       }
@@ -1041,14 +772,6 @@
     }
   },
   "components": {
-    "securitySchemes": {
-      "cookieAuth": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "connect.sid",
-        "description": "Session cookie for authentication"
-      }
-    },
     "schemas": {
       "Patient": {
         "type": "object",
@@ -1450,16 +1173,19 @@
         "properties": {
           "error": {
             "type": "string",
-            "example": "Error message description"
+            "example": "Error description"
           },
-          "details": {
+          "message": {
             "type": "string",
-            "example": "Additional error details"
+            "example": "Detailed error message"
+          },
+          "statusCode": {
+            "type": "integer",
+            "example": 400
           },
           "timestamp": {
             "type": "string",
-            "format": "date-time",
-            "example": "2023-09-01T10:00:00Z"
+            "format": "date-time"
           },
           "path": {
             "type": "string",
